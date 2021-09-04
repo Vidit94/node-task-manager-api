@@ -194,6 +194,7 @@ router.patch('/users/me', auth, async (req, res) => {
 router.delete('/users/me', auth, async (req, res) => {
     try {
         await req.user.remove()
+    sendCancelationEmail(req.user.email, req.user.name)
         res.send(req.user)
     } catch (e) {
         console.log(e)
@@ -214,7 +215,6 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
 router.delete('/users/me/avatar', auth, async (req, res) => {
     req.user.avatar = undefined;
     await req.user.save()
-    sendCancelationEmail(req.user.email, req.user.name)
     res.send()
 })
 
